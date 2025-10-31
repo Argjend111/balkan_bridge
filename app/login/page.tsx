@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import Logo from "@/public/logo.png"
+import { LoginForm } from "@/components/forms/LoginForm";
 
 
 export default function Home() {
@@ -12,6 +13,7 @@ export default function Home() {
         <h1 className="text-2xl font-bold">Balkan
                 <span className="text-primary">Bridge</span></h1>
       </Link>
+      <LoginForm/>
     </div>
    </div>
   );
