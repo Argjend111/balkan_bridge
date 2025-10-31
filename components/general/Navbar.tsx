@@ -2,6 +2,7 @@ import Link from "next/link";
 import Logo from "@/public/logo.png"
 import Image from "next/image";
 import { Button } from "../ui/button";
+import { ModeToggle } from "./ThemeToggle";
 
 
 export default function Navbar(){
@@ -12,9 +13,12 @@ export default function Navbar(){
             <h1 className="text-2xl font-bold">Balkan
                 <span className="text-primary">Bridge</span></h1>
             </Link>
-            <Button className="cursor-pointer">
+           <div className="flex items-center gap-4">
+            <ModeToggle/>
+            <Button>
                 Login
             </Button>
+           </div>
         </nav>
     )
 }
