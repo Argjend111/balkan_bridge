@@ -1,3 +1,4 @@
+import { createJobSeeker } from "@/app/actions"
 import { jobSeekerSchema } from "@/app/utils/zodSchema"
 import { UploadDropzone } from "@/components/general/UploadThingReexported"
 import { Button } from "@/components/ui/button"
@@ -7,9 +8,12 @@ import { Textarea } from "@/components/ui/textarea"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { XIcon } from "lucide-react"
 import Image from "next/image"
+import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 import {z} from "zod"
+import '@uploadthing/react/styles.css';
+import PdfImage from '@/public/pdf.png'
 
 export function JobSeekerForm(){
     const form = useForm<z.infer<typeof jobSeekerSchema>>({
@@ -21,9 +25,26 @@ export function JobSeekerForm(){
         }
     })
         
+    const [pending, setPending] = useState(false);
+
+    async function onSubmit(values: z.infer<typeof jobSeekerSchema>) {
+        try {
+            setPending(true);
+            await createJobSeeker(values);
+        } catch (error) {
+            console.log(error);
+            if (error instanceof Error && error.message !== "NEXT_REDIRECT") {
+                toast.error("Something went wrong. Please try again.");
+            }
+        } finally {
+            setPending(false);
+        }
+    }
+
+
     return (
         <Form {...form}>
-            <form className="space-y-6">
+            <form className="space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
                 <FormField
                         control={form.control}
                         name="name"
@@ -65,8 +86,8 @@ export function JobSeekerForm(){
                                     {field.value ? (
                                         <div className="relative w-fit">
                                             <Image
-                                                src={field.value}
-                                                alt="Company Logo"
+                                                src={PdfImage}
+                                                alt="PDF RESUME"
                                                 width={100}
                                                 height={100}
                                                 className="rounded-lg"
@@ -114,6 +135,9 @@ border-primary!
                         </FormItem>
                     )}
                 />
+                <Button type="submit" className="w-full cursor-pointer" disabled={pending}>
+                    {pending ? 'Submitting...' : "Continu"}
+                </Button>
             </form>
         </Form>
     )
