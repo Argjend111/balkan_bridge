@@ -45,7 +45,7 @@ export default function OnboardingForm() {
             </div>
 
             <Card className="max-w-lg w-full">
-                <CardContent className="p-6">
+                <CardContent className="p-6 ">
                  {renderStep ()}
                 </CardContent>
             </Card>

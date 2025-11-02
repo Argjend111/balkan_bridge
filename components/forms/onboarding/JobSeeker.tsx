@@ -1,8 +1,14 @@
 import { jobSeekerSchema } from "@/app/utils/zodSchema"
+import { UploadDropzone } from "@/components/general/UploadThingReexported"
+import { Button } from "@/components/ui/button"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
+import { Textarea } from "@/components/ui/textarea"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { XIcon } from "lucide-react"
+import Image from "next/image"
 import { useForm } from "react-hook-form"
+import { toast } from "sonner"
 import {z} from "zod"
 
 export function JobSeekerForm(){
@@ -17,7 +23,7 @@ export function JobSeekerForm(){
         
     return (
         <Form {...form}>
-            <form>
+            <form className="space-y-6">
                 <FormField
                         control={form.control}
                         name="name"
@@ -31,6 +37,83 @@ export function JobSeekerForm(){
                             </FormItem>
                         )}
                     />
+                    <FormField
+                    control={form.control}
+                    name="about"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Short in Bio</FormLabel>
+                            <FormControl>
+                                <Textarea
+                                    placeholder="Tell us about yourself..."
+                                    className="resize-none"
+                                    {...field}
+                                />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
+                  <FormField
+                    control={form.control}
+                    name="resume"
+                    render={({ field }) => (
+                        <FormItem className="">
+                            <FormLabel>Resume (PDF)</FormLabel>
+                            <FormControl>
+                                <div>
+                                    {field.value ? (
+                                        <div className="relative w-fit">
+                                            <Image
+                                                src={field.value}
+                                                alt="Company Logo"
+                                                width={100}
+                                                height={100}
+                                                className="rounded-lg"
+                                            />
+                                            <Button
+                                                type="button"
+                                                variant="destructive"
+                                                size="icon"
+                                                className="absolute -top-2 -right-2 "
+                                                onClick={() => field.onChange("")}
+                                            >
+                                                <XIcon className="h-4 w-4" />
+                                            </Button>
+                                        </div>
+                                    ) : (
+                                        <UploadDropzone
+                                            endpoint="resumeUploader"
+                                            onClientUploadComplete={(res) => {
+                                                field.onChange(res[0].url);
+                                                toast.success("Logo uploaded successfully!");
+                                            }}
+                                            onUploadError={() => {
+                                                toast.error("Something went wrong. Please try again.");
+                                            }}
+                                            className="
+[&_button]:bg-primary!
+[&_button]:text-white!
+[&_button]:hover:bg-primary/90!
+[&_button]:rounded-(--radius-md)!
+[&_button]:border!
+cursor-pointer
+[&_button]:border-(--color-border)!
+[&_label]:hover:text-primary!
+[&_svg]:h-15!
+[&_svg]:w-15!
+border-primary!
+"
+
+                                        />
+
+                                    )}
+                                </div>
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
             </form>
         </Form>
     )
