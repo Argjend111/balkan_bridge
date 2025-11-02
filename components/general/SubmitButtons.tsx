@@ -52,7 +52,7 @@ export function SaveJobButton({ savedJob }: { savedJob: boolean }) {
       variant="outline"
       disabled={pending}
       type="submit"
-      className="flex items-center gap-2"
+      className="flex items-center gap-2 "
     >
       {pending ? (
         <>
