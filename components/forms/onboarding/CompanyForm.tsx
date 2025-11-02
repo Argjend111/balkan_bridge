@@ -7,6 +7,8 @@ import z from "zod"
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { countryList } from "@/app/utils/countriesList";
+import { Textarea } from "@/components/ui/textarea";
+import { UploadDropzone } from "@/components/general/UploadThingReexported";
 
 export function CompanyForm() {
     const form = useForm<z.infer<typeof companySchema>>({
@@ -60,18 +62,18 @@ export function CompanyForm() {
                                                 <span></span><span>Worldwide / Remote</span>
                                             </SelectItem>
                                         </SelectGroup>
-                                            <SelectGroup>
+                                        <SelectGroup>
                                             <SelectLabel>
                                                 Location
                                             </SelectLabel>
                                             {countryList.map((country) => (
-                                            <SelectItem value={country.name} key={country.code}>
-                                                <span>{country.flagEmoji}</span>
-                                                <span className="pl-2">{country.name}</span>
-                                                
-                                               
-                                            </SelectItem>
-                                             ))}
+                                                <SelectItem value={country.name} key={country.code}>
+                                                    <span>{country.flagEmoji}</span>
+                                                    <span className="pl-2">{country.name}</span>
+
+
+                                                </SelectItem>
+                                            ))}
                                         </SelectGroup>
                                     </SelectContent>
                                 </Select>
@@ -81,7 +83,7 @@ export function CompanyForm() {
                     />
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <FormField
+                    <FormField
                         control={form.control}
                         name="website"
                         render={({ field }) => (
@@ -108,8 +110,39 @@ export function CompanyForm() {
                         )}
                     />
                 </div>
+                <FormField
+                    control={form.control}
+                    name="about"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>About</FormLabel>
+                            <FormControl>
+                                <Textarea placeholder="Tell us about your company..." {...field} />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
 
-                
+                <FormField
+                    control={form.control}
+                    name="logo"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Company Logo</FormLabel>
+                            <FormControl>
+                                <UploadDropzone
+                                    endpoint="imageUploader"
+                                    onClientUploadComplete={(res) => field.onChange(res[0].url)}
+                                    onUploadError={() => {
+                                        console.log("Something went wrong");
+                                    }}
+                                    className="w-full border border-primary rounded-lg ut-button:bg-primary ut-button:text-white ut-button:hover:bg-primary/90 ut-label:text-muted-foreground ut-allowed-content:text-muted-foreground"
+                                /></FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
             </form>
         </Form>
     );
