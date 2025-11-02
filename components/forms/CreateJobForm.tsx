@@ -9,6 +9,7 @@ import { Input } from "../ui/input";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "../ui/select";
 import z from "zod";
 import { countryList } from "@/app/utils/countriesList";
+import { SalaryRangeSelector } from "../general/SalaryRangeSelector";
 
 interface CreateJobFormProps {
     companyName: string;
@@ -131,6 +132,13 @@ export function CreateJobForm({
                                     </FormItem>
                                 )}
                             />
+
+                            <FormItem>
+                                <FormLabel>Salary Range</FormLabel>
+                                <FormControl>
+                                    <SalaryRangeSelector />
+                                </FormControl>
+                            </FormItem>
                         </div>
                     </CardContent>
                 </Card>
