@@ -10,6 +10,9 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrig
 import z from "zod";
 import { countryList } from "@/app/utils/countriesList";
 import { SalaryRangeSelector } from "../general/SalaryRangeSelector";
+import JobDescriptionEditor from "../richTextEditor.tsx/JobDescriptionEditor";
+
+
 
 interface CreateJobFormProps {
     companyName: string;
@@ -136,10 +139,30 @@ export function CreateJobForm({
                             <FormItem>
                                 <FormLabel>Salary Range</FormLabel>
                                 <FormControl>
-                                    <SalaryRangeSelector />
+                                    <SalaryRangeSelector 
+                                    control={form.control}
+                                    minSalary={1000}
+                                    maxSalary={300000}
+                                    currency="USD"
+                                    step={2000}
+                                    />
                                 </FormControl>
                             </FormItem>
                         </div>
+
+                        <FormField 
+                        control={form.control}
+                        name="jobDescription"
+                        render={({field}) => (
+                            <FormItem>
+                                <FormLabel>Job Description</FormLabel>
+                                <FormControl>
+                                    <JobDescriptionEditor field={field} />
+                                </FormControl>
+                                <FormMessage/>
+                            </FormItem>
+                        )}
+                        />
                     </CardContent>
                 </Card>
             </form>
