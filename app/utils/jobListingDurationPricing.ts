@@ -6,19 +6,9 @@ interface iAppProps {
 
 export const jobListingDurationpPricing: iAppProps[] = [
   {
-    days: 7,
+    days: 30,
     price: 39,
     description: "Basic listing (visible for 7 days)"
-  },
-  {
-    days: 14,
-    price: 59,
-    description: "Extended listing (visible for 2 weeks)"
-  },
-  {
-    days: 30,
-    price: 99,
-    description: "Standard listing (visible for 1 month)"
   },
   {
     days: 60,

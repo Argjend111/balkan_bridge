@@ -24,54 +24,54 @@ import { JobListingDurationSelector } from "../general/JobListingDurationSelecto
 import { createJob } from "@/app/actions";
 
 interface CreateJobFormProps {
-    companyName: string;
-    companyLocation: string;
-    companyAbout: string;
-    companyLogo: string;
-    companyXAccount: string | null;
-    companyWebsite: string;
+  companyName: string;
+  companyLocation: string;
+  companyAbout: string;
+  companyLogo: string;
+  companyXAccount: string | null;
+  companyWebsite: string;
 }
 
 export function CreateJobForm({
-    companyAbout,
-    companyLocation,
-    companyLogo,
-    companyXAccount,
-    companyName,
-    companyWebsite,
+  companyAbout,
+  companyLocation,
+  companyLogo,
+  companyXAccount,
+  companyName,
+  companyWebsite,
 }: CreateJobFormProps) {
-    const form = useForm<z.infer<typeof jobSchema>>({
-        resolver: zodResolver(jobSchema),
-        defaultValues: {
-            benefits: [],
-            companyDescription: companyAbout,
-            companyLocation: companyLocation,
-            companyName: companyName,
-            companyWebsite: companyWebsite,
-            companyXAccount: companyXAccount || "",
-            employmentType: "",
-            jobDescription: "",
-            jobTitle: "",
-            location: "",
-            salaryFrom: 0,
-            salaryTo: 0,
-            companyLogo: companyLogo,
-            listingDuration: 30,
-        },
-    });
+  const form = useForm<z.infer<typeof jobSchema>>({
+    resolver: zodResolver(jobSchema),
+    defaultValues: {
+      benefits: [],
+      companyDescription: companyAbout,
+      companyLocation: companyLocation,
+      companyName: companyName,
+      companyWebsite: companyWebsite,
+      companyXAccount: companyXAccount || "",
+      employmentType: "",
+      jobDescription: "",
+      jobTitle: "",
+      location: "",
+      salaryFrom: 0,
+      salaryTo: 0,
+      companyLogo: companyLogo,
+      listingDuration: 30,
+    },
+  });
 
-    const [pending, setPending] = useState(false);
-    async function onSubmit(values: z.infer<typeof jobSchema>) {
-        try {
-            setPending(true);
+  const [pending, setPending] = useState(false);
+  async function onSubmit(values: z.infer<typeof jobSchema>) {
+    try {
+      setPending(true);
 
-            await createJob(values);
-        } catch {
-            toast.error("Something went wrong. Please try again.");
-        } finally {
-            setPending(false);
-        }
+      await createJob(values);
+    } catch {
+      toast.error("Something went wrong. Please try again.");
+    } finally {
+      setPending(false);
     }
+  }
     return (
         <Form {...form}>
             <form className="col-span-1   lg:col-span-2  flex flex-col gap-8"
@@ -408,9 +408,9 @@ border-primary!
                         />
                     </CardContent>
                 </Card>
-                <Button type="submit" className="w-full" disabled={pending}>
-                    {pending ? "Submitting..." : "Continue"}
-                </Button>
+               <Button type="submit" className="w-full" disabled={pending}>
+          {pending ? "Submitting..." : "Continue"}
+        </Button>
             </form>
         </Form>
     );
