@@ -84,15 +84,42 @@ export async function createJobSeeker(data: z.infer<typeof jobSeekerSchema>) {
 export async function createJob(data: z.infer<typeof jobSchema>) {
   const user = await requireUser();
 
-  const validatedData = jobSchema.parse(data);
+
+  const req = await request()
+
+  const decision = await aj.protect(req)
+
+  if(decision.isDenied()){
+    throw new Error("Forbidden")
+  }
+
+  const validateData = jobSchema.parse(data);
 
   const company = await prisma.company.findUnique({
-    where: {
-      userId: user.id,
+    where:{
+      userId: user.id
     },
-    select: {
-      id: true,
-    },
+    select:{
+      id:true
+    }
+  })
+
+  if(!company?.id){
+    return redirect("/")
+  }
+
+  await prisma.jobPost.create({
+    data: {
+      jobDescription: validateData.jobDescription,
+      jobTitle: validateData.jobTitle,
+      employmentType:validateData.employmentType,
+      location:validateData.location,
+      salaryFrom:validateData.salaryFrom,
+      salaryTo:validateData.salaryTo,
+      listingDuration:validateData.listingDuration,
+      benefits:validateData.benefits,
+      companyId: company.id
+    }
   });
-   return redirect("/");
+  return redirect("/")
 }

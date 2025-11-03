@@ -18,10 +18,10 @@ import { Button } from "../ui/button";
 import { XIcon } from "lucide-react";
 import { UploadDropzone } from "../general/UploadThingReexported";
 import { toast } from "sonner";
+import { useState } from "react";
 import '@uploadthing/react/styles.css';
 import { JobListingDurationSelector } from "../general/JobListingDurationSelector";
-
-
+import { createJob } from "@/app/actions";
 
 interface CreateJobFormProps {
     companyName: string;
@@ -60,9 +60,22 @@ export function CreateJobForm({
         },
     });
 
+    const [pending, setPending] = useState(false);
+    async function onSubmit(values: z.infer<typeof jobSchema>) {
+        try {
+            setPending(true);
+
+            await createJob(values);
+        } catch {
+            toast.error("Something went wrong. Please try again.");
+        } finally {
+            setPending(false);
+        }
+    }
     return (
         <Form {...form}>
-            <form className="col-span-1   lg:col-span-2  flex flex-col gap-8">
+            <form className="col-span-1   lg:col-span-2  flex flex-col gap-8"
+                onSubmit={form.handleSubmit(onSubmit)}>
                 <Card>
                     <CardHeader>
                         <CardTitle>Job Information</CardTitle>
@@ -204,6 +217,7 @@ export function CreateJobForm({
                                         <FormControl>
                                             <Input placeholder="Company name..." {...field} />
                                         </FormControl>
+                                        <FormMessage />
                                     </FormItem>
                                 )}
                             />
@@ -386,7 +400,7 @@ border-primary!
                             render={({ field }) => (
                                 <FormItem>
                                     <FormControl>
-                                        <JobListingDurationSelector field={field} />
+                                        <JobListingDurationSelector field={field as never} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
