@@ -4,8 +4,9 @@ import React from "react";
 import { redirect } from "next/navigation";
 
 import OnboardingForm from "@/components/forms/onboarding/OnboardingForm";
-import prisma from "../utils/db";
+
 import { requireUser } from "../utils/requireUser";
+import { prisma } from "../utils/db";
 
 async function checkIfOnboardingCompleted(userId: string) {
   const user = await prisma.user.findUnique({

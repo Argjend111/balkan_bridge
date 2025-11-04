@@ -3,12 +3,13 @@
 import { requireUser } from "./utils/requireUser"
 import { z } from 'zod'
 import { companySchema, jobSchema, jobSeekerSchema } from "./utils/zodSchema";
-import prisma from "./utils/db";
+
 import { redirect } from "next/navigation";
 import arcjet, { detectBot, shield } from "./utils/arcjet";
 import { request } from "@arcjet/next";
 import { stripe } from "./utils/stripe";
 import { jobListingDurationpPricing } from "./utils/jobListingDurationPricing";
+import { prisma } from "./utils/db";
 
 const aj = arcjet.withRule(
   shield({
