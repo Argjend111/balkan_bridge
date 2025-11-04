@@ -1,4 +1,6 @@
 import { signOut } from "@/app/utils/auth";
+import { prisma } from "@/app/utils/db";
+import { requireUser } from "@/app/utils/requireUser";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
@@ -18,9 +20,17 @@ interface iAppProps {
   email: string;
   name: string;
   image: string;
+  companyId?: string;
 }
 
-export function UserDropdown({ email, name, image }: iAppProps) {
+export async function UserDropdown({ email, name, image }: iAppProps) {
+  const user = await requireUser();
+  const company = await prisma.company.findUnique({
+    where: { userId: user.id },
+    select: { id: true },
+  });
+
+  const companyId = company?.id;
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -59,18 +69,21 @@ export function UserDropdown({ email, name, image }: iAppProps) {
               <span>Saved Jobs</span>
             </Link>
           </DropdownMenuItem>
-          <DropdownMenuItem asChild>
-            <Link href="/my-jobs">
-              <Layers2
-                size={16}
-                strokeWidth={2}
-                className="opacity-60"
-                aria-hidden="true"
-              />
-              <span>My Job Listings</span>
-            </Link>
-          </DropdownMenuItem>
+          {companyId && (
+            <DropdownMenuItem asChild>
+              <Link href={`/my-jobs/${companyId}`}>
+                <Layers2
+                  size={16}
+                  strokeWidth={2}
+                  className="opacity-60"
+                  aria-hidden="true"
+                />
+                <span>My Job Listings</span>
+              </Link>
+            </DropdownMenuItem>
+          )}
         </DropdownMenuGroup>
+
 
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>

@@ -8,33 +8,27 @@ import { UserTypeSelection } from "./UserTypeForm";
 import { CompanyForm } from "./CompanyForm";
 import { JobSeekerForm } from "./JobSeeker";
 
-type UserSelectionType = 'company' | 'jobSeeker' | null;
+type UserType = "company" | "jobSeeker" | null;
 
 export default function OnboardingForm() {
+  const [step, setStep] = useState(1);
+  const [userType, setUserType] = useState<UserType>(null);
 
-    const [step, setStep] = useState(1);
-    const [userType, setUserType] = useState<UserSelectionType>(null)
+  const handleUserTypeSelect = (type: UserType) => {
+    setUserType(type);
+    setStep(2);
+  };
 
-    function handleUserTypeSelection(type: UserSelectionType) {
-        setUserType(type)
-        setStep(2)
+  const renderStep = () => {
+    switch (step) {
+      case 1:
+        return <UserTypeSelection onSelect={handleUserTypeSelect} />;
+      case 2:
+        return userType === "company" ? <CompanyForm /> : <JobSeekerForm />;
+      default:
+        return null;
     }
-
-    function renderStep() {
-        switch (step) {
-            case 1:
-                return <UserTypeSelection onSelect={handleUserTypeSelection}/>
-            case 2:
-                return userType === "company" ? (
-                    <CompanyForm/>
-                ) : (
-                    <JobSeekerForm/>
-                );
-            default:
-                return null;
-        }
-    }
-
+  };
 
 
     return (

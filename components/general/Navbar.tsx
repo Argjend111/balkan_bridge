@@ -17,24 +17,36 @@ import { auth } from "@/app/utils/auth";
 
 import { UserDropdown } from "./UserDropdown";
 import { ThemeToggle } from "./ThemeToggle";
+import { prisma } from "@/app/utils/db";
 
 
 export async function Navbar() {
   const session = await auth();
 
+  let userType: string | null = null;
+  if (session?.user?.email) {
+    const user = await prisma.user.findUnique({
+      where: { email: session.user.email },
+      select: { userType: true },
+    });
+    userType = user?.userType ?? null;
+  }
+
   return (
     <nav className="flex justify-between items-center py-5">
       <Link href="/" className="flex items-center gap-2">
-        <Image src={Logo} alt="Job Marshal Logo" width={40} height={40} />
+        <Image src={Logo} alt="BalkanBridge Logo" width={40} height={40} />
         <h1 className="text-2xl font-bold">
           Balkan<span className="text-primary">Bridge</span>
         </h1>
       </Link>
       <div className="hidden md:flex items-center gap-5">
         <ThemeToggle />
+        {userType === "COMPANY" && (
         <Link href="/post-job" className={buttonVariants({ size: "lg" })}>
           Post Job
         </Link>
+         )}
         {session?.user ? (
           <UserDropdown
             email={session.user.email as string}

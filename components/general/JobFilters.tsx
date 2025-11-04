@@ -31,7 +31,6 @@ export function JobFilters() {
 
   const jobTypes = ["full-time", "part-time", "contract", "internship"];
 
-  // Get current filters from URL
   const currentJobTypes = searchParams.get("jobTypes")?.split(",") || [];
   const currentLocation = searchParams.get("location") || "";
   const currentMinSalary = searchParams.get("minSalary") || "";

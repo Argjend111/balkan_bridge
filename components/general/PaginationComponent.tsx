@@ -34,21 +34,21 @@ export function PaginationComponent({
         for (let i = 1; i <= 3; i++) {
           items.push(i);
         }
-        items.push(null); // Ellipsis
+        items.push(null); 
         items.push(totalPages);
       } else if (currentPage >= totalPages - 2) {
         items.push(1);
-        items.push(null); // Ellipsis
+        items.push(null); 
         for (let i = totalPages - 2; i <= totalPages; i++) {
           items.push(i);
         }
       } else {
         items.push(1);
-        items.push(null); // Ellipsis
+        items.push(null); 
         items.push(currentPage - 1);
         items.push(currentPage);
         items.push(currentPage + 1);
-        items.push(null); // Ellipsis
+        items.push(null); 
         items.push(totalPages);
       }
     }

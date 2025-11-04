@@ -25,6 +25,7 @@ model User {
   JobSeeker JobSeeker?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  SavedJobPost SavedJobPost[]
 }
 
 enum UserType{
@@ -123,6 +124,7 @@ model JobPost {
 
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @updatedAt
+  SavedJobPost SavedJobPost[]
 }
 
 enum JobPostStatus{
@@ -131,3 +133,16 @@ enum JobPostStatus{
   EXPIRED
 }
 
+model SavedJobPost {
+  id     String @id @default(uuid())
+  jobId  String
+  userId String
+
+  job  JobPost @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  user User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, jobId])
+}

@@ -2,16 +2,18 @@
 
 import { z } from "zod";
 
+
 import { prisma } from "./utils/db";
 import { redirect } from "next/navigation";
 import { stripe } from "./utils/stripe";
+
 import { revalidatePath } from "next/cache";
 import arcjet, { detectBot, shield } from "./utils/arcjet";
 import { request } from "@arcjet/next";
+import { inngest } from "./utils/inngest/client";
 import { requireUser } from "./utils/requireUser";
 import { companySchema, jobSchema, jobSeekerSchema } from "./utils/zodSchema";
 import { jobListingDurationpPricing } from "./utils/jobListingDurationPricing";
-import { inngest } from "./utils/inngest/client";
 
 const aj = arcjet
   .withRule(
@@ -36,7 +38,6 @@ export async function createCompany(data: z.infer<typeof companySchema>) {
   if (decision.isDenied()) {
     throw new Error("Forbidden");
   }
-
   const validatedData = companySchema.parse(data);
 
   console.log(validatedData);
@@ -167,11 +168,11 @@ export async function createJob(data: z.infer<typeof jobSchema>) {
             name: `Job Posting - ${pricingTier.days} Days`,
             description: pricingTier.description,
             images: [
-              "https://pve1u6tfz1.ufs.sh/f/Ae8VfpRqE7c0gFltIEOxhiBIFftvV4DTM8a13LU5EyzGb2SQ",
+              "https://klyuthjohz.ufs.sh/f/clHFS5CS0DYezdpNLtg5DvMInhAZPR83K0r9SbqOGeQtWlpw",
             ],
           },
           currency: "USD",
-          unit_amount: pricingTier.price * 100,
+          unit_amount: pricingTier.price * 100, 
         },
         quantity: 1,
       },
@@ -230,4 +231,33 @@ export async function deleteJobPost(jobId: string) {
   });
 
   return redirect("/my-jobs");
+}
+
+export async function saveJobPost(jobId: string) {
+  const user = await requireUser();
+
+  await prisma.savedJobPost.create({
+    data: {
+      jobId: jobId,
+      userId: user.id as string,
+    },
+  });
+
+  revalidatePath(`/job/${jobId}`);
+}
+
+export async function unsaveJobPost(savedJobPostId: string) {
+  const user = await requireUser();
+
+  const data = await prisma.savedJobPost.delete({
+    where: {
+      id: savedJobPostId,
+      userId: user.id as string,
+    },
+    select: {
+      jobId: true,
+    },
+  });
+
+  revalidatePath(`/job/${data.jobId}`);
 }
