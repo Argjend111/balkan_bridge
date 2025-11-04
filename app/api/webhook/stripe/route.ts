@@ -1,5 +1,4 @@
-
-import prisma from "@/app/utils/db";
+import { prisma } from "@/app/utils/db";
 import { stripe } from "@/app/utils/stripe";
 import { headers } from "next/headers";
 import Stripe from "stripe";
@@ -19,9 +18,10 @@ export async function POST(req: Request) {
             signature,
             process.env.STRIPE_WEBHOOK_SECRET as string
         );
-    } catch {
-        return new Response("Webhook error", { status: 400 });
-    }
+    } catch (err) {
+  console.error("Webhook signature error:", err);
+  return new Response("Webhook error", { status: 400 });
+}
 
     const session = event.data.object as Stripe.Checkout.Session;
 
@@ -43,10 +43,16 @@ export async function POST(req: Request) {
         if (!user) throw new Error("User not found...");
 
         await prisma.jobPost.update({
-            where: { id: jobId },
-            data: { status: "ACTIVE" },
+            where: {
+                id: jobId,
+                company: {
+                    userId: user.id,
+                },
+            },
+            data: {
+                status: "ACTIVE",
+            },
         });
     }
-
     return new Response(null, { status: 200 });
 }
