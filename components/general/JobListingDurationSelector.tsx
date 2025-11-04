@@ -23,7 +23,7 @@ export function JobListingDurationSelector({
         value={field.value?.toString()}
         onValueChange={(value) => field.onChange(parseInt(value))}
       >
-        <div className="grid gap-4">
+        <div className="grid gap-4 ">
           {jobListingDurationpPricing.map((duration) => (
             <div key={duration.days} className="relative">
               <RadioGroupItem
@@ -35,8 +35,8 @@ export function JobListingDurationSelector({
                 htmlFor={duration.days.toString()}
                 className="flex flex-col cursor-pointer"
               >
-                <Card
-                  className={`p-4 border-2 transition-all ${
+                <Card 
+                  className={`p-4 border-2 transition-all w-full ${
                     field.value === duration.days
                       ? "border-primary bg-primary/10"
                       : "hover:bg-secondary/50"

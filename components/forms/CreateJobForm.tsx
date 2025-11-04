@@ -122,7 +122,7 @@ export function CreateJobForm({
                       onValueChange={field.onChange}
                       defaultValue={field.value}
                     >
-                      <FormControl>
+                      <FormControl className="w-full">
                         <SelectTrigger>
                           <SelectValue placeholder="Select Employment Type" />
                         </SelectTrigger>
@@ -144,7 +144,7 @@ export function CreateJobForm({
               />
             </div>
 
-            <div className="grid md:grid-cols-2 gap-6">
+            <div className="grid md:grid-cols-2 gap-6 ">
               <FormField
                 control={form.control}
                 name="location"
@@ -155,7 +155,7 @@ export function CreateJobForm({
                       onValueChange={field.onChange}
                       defaultValue={field.value}
                     >
-                      <FormControl>
+                      <FormControl className="w-full">
                         <SelectTrigger>
                           <SelectValue placeholder="Select Location" />
                         </SelectTrigger>
@@ -255,13 +255,13 @@ export function CreateJobForm({
                 control={form.control}
                 name="companyLocation"
                 render={({ field }) => (
-                  <FormItem>
+                  <FormItem className="">
                     <FormLabel>Location</FormLabel>
                     <Select
                       onValueChange={field.onChange}
                       defaultValue={field.value}
                     >
-                      <FormControl>
+                      <FormControl className="w-full">
                         <SelectTrigger>
                           <SelectValue placeholder="Select Location" />
                         </SelectTrigger>
@@ -407,7 +407,7 @@ export function CreateJobForm({
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="w-full">
           <CardHeader>
             <CardTitle>Job Listing Duration</CardTitle>
           </CardHeader>
@@ -426,7 +426,7 @@ export function CreateJobForm({
             />
           </CardContent>
         </Card>
-        <Button type="submit" className="w-full" disabled={pending}>
+        <Button type="submit" className="w-full mb-4" disabled={pending}>
           {pending ? "Submitting..." : "Continue"}
         </Button>
       </form>
